@@ -1,0 +1,11 @@
+---
+
+- name: Create kubeadm directory
+  file:
+    path: /var/lib/kubeadm
+    state: directory
+
+- name: Write kubeadm config
+  template:
+    src: config.yaml.j2
+    dest: /var/lib/kubeadm/config.yaml

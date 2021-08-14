@@ -1,0 +1,25 @@
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+clusterName: mommynet
+controlPlaneEndpoint: {{ groups["master"][0] }}
+featureGates:
+  IPv6DualStack: true
+networking:
+  podSubnet: {{ pod_subnet | default("10.42.0.0/16") }}
+  serviceSubnet: {{ service_subnet | default("10.43.0.0/16") }}
+controllerManager:
+  extraArgs:
+    node-cidr-mask-size-ipv4: "{{ node_cidr_mask_size_v4 }}"
+    node-cidr-mask-size-ipv6: "{{ node_cidr_mask_size_v6 }}"
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+serverTLSBootstrap: true
+rotateCertificates: true
+---
+apiVersion: kubeproxy.config.k8s.io/v1alpha1
+kind: KubeProxyConfiguration
+mode: "ipvs"
+ipvs:
+  strictArp: true

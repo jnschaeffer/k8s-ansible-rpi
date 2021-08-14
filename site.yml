@@ -1,0 +1,17 @@
+---
+- hosts: k8s_cluster
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: prereq
+    - role: containerd
+    - role: resolved
+    - role: download
+    - role: kubeadm
+    - role: storage
+    - role: certs
+
+- hosts: master
+  become: yes
+  roles:
+    - role: master

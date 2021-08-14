@@ -1,0 +1,12 @@
+---
+
+- name: Add CA certificate to trusted repository
+  copy:
+    src: ca.crt
+    dest: /usr/local/share/ca-certificates/experimental.systems.crt
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Update CA store
+    - Restart containerd

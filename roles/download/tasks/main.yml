@@ -1,0 +1,43 @@
+---
+
+- name: Install prerequisite packages
+  apt:
+    name:
+      - ipvsadm
+      - apt-transport-https
+      - curl
+    state: present
+
+- name: Add Google apt-key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add Kubernetes apt-repo
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes
+
+- name: Install Kubernetes packages
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+
+- name: Prevent kubelet from being upgraded
+  dpkg_selections:
+    name: kubelet
+    selection: hold
+
+- name: Prevent kubeadm from being upgraded
+  dpkg_selections:
+    name: kubeadm
+    selection: hold
+
+- name: Prevent kubectl from being upgraded
+  dpkg_selections:
+    name: kubectl
+    selection: hold

@@ -1,0 +1,11 @@
+---
+
+- name: Check kubeadm init status
+  slurp:
+    src: /var/lib/kubeadm/status
+  register: kubeadm_status
+  changed_when: false
+
+- name: Run kubeadm init
+  shell: kubeadm init --config /var/lib/kubeadm/config.yaml && echo -n "success" > /var/lib/kubeadm/status
+  when: kubeadm_status.content | b64decode != "success"

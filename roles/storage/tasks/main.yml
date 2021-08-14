@@ -1,0 +1,8 @@
+---
+
+- name: Install storage utilities
+  apt:
+    name:
+      - nfs-common
+      - open-iscsi
+    state: present
