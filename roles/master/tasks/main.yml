@@ -3,6 +3,7 @@
 - name: Check kubeadm init status
   slurp:
     src: /var/lib/kubeadm/status
+  ignore_errors: true
   register: kubeadm_status
   changed_when: false
 

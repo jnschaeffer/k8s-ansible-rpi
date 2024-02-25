@@ -1,9 +1,7 @@
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 kind: ClusterConfiguration
 clusterName: mommynet
 controlPlaneEndpoint: {{ groups["master"][0] }}
-featureGates:
-  IPv6DualStack: true
 networking:
   podSubnet: {{ pod_subnet | default("10.42.0.0/16") }}
   serviceSubnet: {{ service_subnet | default("10.43.0.0/16") }}
@@ -22,4 +20,4 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: "ipvs"
 ipvs:
-  strictArp: true
+  strictARP: true

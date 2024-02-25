@@ -1,9 +1,0 @@
----
-
-- name: Update CA store
-  shell: /usr/sbin/update-ca-certificates
-
-- name: Restart containerd
-  service:
-    name: containerd
-    state: restarted

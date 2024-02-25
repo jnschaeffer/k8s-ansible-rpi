@@ -6,18 +6,21 @@
       - ipvsadm
       - apt-transport-https
       - curl
+      - ca-certificates
+      - gpg
     state: present
 
-- name: Add Google apt-key
-  apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    state: present
+- name: Add Kubernetes key
+  block:
+    - name: Get key
+      ansible.builtin.get_url:
+        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+        dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
 
-- name: Add Kubernetes apt-repo
-  apt_repository:
-    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
-    state: present
-    filename: kubernetes
+    - name: Add to apt source
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+        state: present
 
 - name: Install Kubernetes packages
   apt:

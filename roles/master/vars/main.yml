@@ -1,1 +1,0 @@
-kubeadm_status: "{{ lookup('file', '/var/lib/kubeadm/status', errors='ignore') }}"
