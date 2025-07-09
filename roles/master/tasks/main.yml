@@ -1,12 +1,21 @@
 ---
 
 - name: Check kubeadm init status
+  stat:
+    path: /var/lib/kubeadm/status
+  register: ks_stat
+
+- name: Check kubeadm init success
   slurp:
-    src: /var/lib/kubeadm/status
-  ignore_errors: true
-  register: kubeadm_status
-  changed_when: false
+    path: /var/lib/kubeadm/status
+  register: ks_status
+  when: ks_stat.stat.exists is defined and ks_stat.stat.exists
 
 - name: Run kubeadm init
   shell: kubeadm init --config /var/lib/kubeadm/config.yaml && echo -n "success" > /var/lib/kubeadm/status
-  when: kubeadm_status.content | b64decode != "success"
+  register: ki_out
+  when: (ks_status.content is not defined) or (ks_status.content is defined and (ks_status.content | b64decode != 'success'))
+
+- name: Print output
+  debug:
+    msg: "{{ ki_out.stdout }}"

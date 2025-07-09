@@ -1,14 +1,23 @@
-apiVersion: kubeadm.k8s.io/v1beta3
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+nodeRegistration:
+  name: {{ groups["master"][0] }}
+---
+apiVersion: kubeadm.k8s.io/v1beta4
 kind: ClusterConfiguration
-clusterName: mommynet
-controlPlaneEndpoint: {{ groups["master"][0] }}
-networking:
-  podSubnet: {{ pod_subnet | default("10.42.0.0/16") }}
-  serviceSubnet: {{ service_subnet | default("10.43.0.0/16") }}
+apiServer: {}
+clusterName: {{ cluster_name }}
+controlPlaneEndpoint: {{ groups["master"][0] }}:6443
 controllerManager:
   extraArgs:
-    node-cidr-mask-size-ipv4: "{{ node_cidr_mask_size_v4 }}"
-    node-cidr-mask-size-ipv6: "{{ node_cidr_mask_size_v6 }}"
+  - name: node-cidr-mask-size-ipv4
+    value: "{{ node_cidr_mask_size_v4 }}"
+  - name: node-cidr-mask-size-ipv6
+    value: "{{ node_cidr_mask_size_v6 }}"
+networking:
+  dnsDomain: cluster.local
+  podSubnet: {{ pod_subnet | default("10.42.0.0/16") }}
+  serviceSubnet: {{ service_subnet | default("10.43.0.0/16") }}
 ---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration

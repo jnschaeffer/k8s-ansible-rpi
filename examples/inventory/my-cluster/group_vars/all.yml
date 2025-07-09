@@ -5,3 +5,4 @@ service_subnet: 10.43.0.0/16,abab:6060:fafa:beef:feed::/112
 node_cidr_mask_size_v4: 24
 node_cidr_mask_size_v6: 113
 dns_server: 192.168.2.1
+cluster_name: mycluster

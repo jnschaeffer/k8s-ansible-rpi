@@ -14,12 +14,12 @@
   block:
     - name: Get key
       ansible.builtin.get_url:
-        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+        url: https://pkgs.k8s.io/core:/stable:/v1.33/deb/Release.key
         dest: /etc/apt/keyrings/kubernetes-apt-keyring.asc
 
     - name: Add to apt source
       ansible.builtin.apt_repository:
-        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /"
+        repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.asc] https://pkgs.k8s.io/core:/stable:/v1.33/deb/ /"
         state: present
 
 - name: Install Kubernetes packages
@@ -28,7 +28,7 @@
       - kubelet
       - kubeadm
       - kubectl
-    state: present
+    state: latest
 
 - name: Prevent kubelet from being upgraded
   dpkg_selections:
